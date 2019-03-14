@@ -1,4 +1,4 @@
-package sample;
+package ua.in.devmind.dxfPlot;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
