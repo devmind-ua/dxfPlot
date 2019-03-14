@@ -4,6 +4,9 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 public class Point {
+
+    public static final String COORDINATES_DELIMITER = ",";
+
     private BigDecimal x;
     private BigDecimal y;
 
@@ -45,5 +48,9 @@ public class Point {
     @Override
     public String toString() {
         return "[ " + x.toPlainString() + ", " + y.toPlainString() + " ]";
+    }
+
+    public String toRawString() {
+        return x.toPlainString() + COORDINATES_DELIMITER + y.toPlainString();
     }
 }
