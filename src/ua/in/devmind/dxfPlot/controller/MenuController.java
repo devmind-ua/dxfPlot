@@ -33,6 +33,7 @@ public class MenuController {
 
     @FXML
     protected void exit() {
+        model.savePointsToTempFile(true);
         Platform.exit();
     }
 }
