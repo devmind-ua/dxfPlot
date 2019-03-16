@@ -12,7 +12,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import ua.in.devmind.dxfPlot.controller.MainViewController;
 import ua.in.devmind.dxfPlot.controller.MenuController;
-import ua.in.devmind.dxfPlot.data.Point;
+import ua.in.devmind.dxfPlot.model.data.Point;
 import ua.in.devmind.dxfPlot.model.DataModel;
 
 public class DxfPlot extends Application {

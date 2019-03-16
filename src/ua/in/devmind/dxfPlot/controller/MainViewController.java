@@ -9,7 +9,7 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import ua.in.devmind.dxfPlot.data.Point;
+import ua.in.devmind.dxfPlot.model.data.Point;
 import ua.in.devmind.dxfPlot.model.DataModel;
 
 import java.awt.*;

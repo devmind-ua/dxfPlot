@@ -2,7 +2,7 @@ package ua.in.devmind.dxfPlot.model;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import ua.in.devmind.dxfPlot.data.Point;
+import ua.in.devmind.dxfPlot.model.data.Point;
 
 import java.io.*;
 import java.math.BigDecimal;

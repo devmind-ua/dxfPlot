@@ -1,4 +1,4 @@
-package ua.in.devmind.dxfPlot.data;
+package ua.in.devmind.dxfPlot.model.data;
 
 import java.math.BigDecimal;
 import java.util.Objects;
