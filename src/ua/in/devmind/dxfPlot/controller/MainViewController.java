@@ -17,7 +17,7 @@ import java.math.BigDecimal;
 
 public class MainViewController {
 
-    private DataModel model = new DataModel();
+    private DataModel model;
 
     @FXML
     private TextField primaryCoordinateTextField;
@@ -41,9 +41,15 @@ public class MainViewController {
         ((Runnable) Toolkit.getDefaultToolkit().getDesktopProperty("win.sound.default")).run();
     }
 
-    @FXML
-    public void initialize() {
-        model.init(DataModel.getLatestTempFile());
+    public void initModel(DataModel model) {
+        if (this.model != null) {
+            throw new IllegalStateException("Model can only be initialized once");
+        }
+        this.model = model;
+        initView();
+    }
+
+    public void initView() {
         pointsListView.setItems(model.getPointsList());
         pointsListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         pointsListView.getSelectionModel().selectedItemProperty().addListener((observableValue, point, t1) -> {
