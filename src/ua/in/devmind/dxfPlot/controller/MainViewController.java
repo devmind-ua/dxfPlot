@@ -3,8 +3,6 @@ package ua.in.devmind.dxfPlot.controller;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
@@ -12,13 +10,15 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import ua.in.devmind.dxfPlot.data.Point;
+import ua.in.devmind.dxfPlot.model.DataModel;
 
 import java.awt.*;
 import java.math.BigDecimal;
 
 public class MainViewController {
 
-    private Scene scene;
+    private DataModel model = new DataModel();
+
     @FXML
     private TextField primaryCoordinateTextField;
     @FXML
@@ -43,6 +43,8 @@ public class MainViewController {
 
     @FXML
     public void initialize() {
+        model.init(DataModel.getLatestTempFile());
+        pointsListView.setItems(model.getPointsList());
         pointsListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         pointsListView.getSelectionModel().selectedItemProperty().addListener((observableValue, point, t1) -> {
             if (pointsListView.getSelectionModel().getSelectedItems().isEmpty()) {
@@ -53,14 +55,11 @@ public class MainViewController {
         });
     }
 
-    public void setScene(Scene scene) {
-        this.scene = scene;
-    }
-
     @FXML
     protected void onPrimaryCoordinateTextFieldKeyPressed(KeyEvent keyEvent) {
         if (KeyCode.ENTER.equals(keyEvent.getCode())) {
             if (keyEvent.isControlDown()) {
+                model.savePointsToTempFile(true);
                 primaryCoordinateTextField.setText("");
                 secondaryCoordinateTextField.setText("");
                 primaryCoordinateTextField.requestFocus();
@@ -74,7 +73,7 @@ public class MainViewController {
                 secondaryCoordinateTextField.requestFocus();
             }
         } else if (KeyCode.Z.equals(keyEvent.getCode()) && keyEvent.isControlDown()) {
-            Event.fireEvent(scene, keyEvent);
+            Event.fireEvent(primaryCoordinateTextField.getScene(), keyEvent);
         }
     }
 
@@ -82,6 +81,7 @@ public class MainViewController {
     protected void onSecondaryCoordinateTextFieldKeyPressed(KeyEvent keyEvent) {
         if (KeyCode.ENTER.equals(keyEvent.getCode())) {
             if (secondaryCoordinateTextField.getText().isEmpty() && keyEvent.isControlDown()) {
+                model.savePointsToTempFile(true);
                 primaryCoordinateTextField.setText("");
                 secondaryCoordinateTextField.setText("");
                 primaryCoordinateTextField.requestFocus();
@@ -98,9 +98,10 @@ public class MainViewController {
                 playSound();
                 return;
             } else {
-                pointsListView.getItems().add(0, point);
+                model.addPoint(point);
             }
             if (keyEvent.isControlDown()) {
+                model.savePointsToTempFile(true);
                 primaryCoordinateTextField.setText("");
                 secondaryCoordinateTextField.setText("");
                 primaryCoordinateTextField.requestFocus();
@@ -109,7 +110,7 @@ public class MainViewController {
                 secondaryCoordinateTextField.requestFocus();
             }
         } else if (KeyCode.Z.equals(keyEvent.getCode()) && keyEvent.isControlDown()) {
-            Event.fireEvent(scene, keyEvent);
+            Event.fireEvent(secondaryCoordinateTextField.getScene(), keyEvent);
         }
     }
 
@@ -128,6 +129,7 @@ public class MainViewController {
     private void deleteSelectedPoints() {
         pointsListView.getItems().removeAll(pointsListView.getSelectionModel().getSelectedItems());
         pointsListView.getSelectionModel().clearSelection();
+        model.savePointsToTempFile(false);
     }
 
     public void undoLatestPoint() {

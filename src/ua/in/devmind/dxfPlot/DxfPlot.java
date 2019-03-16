@@ -25,16 +25,13 @@ public class DxfPlot extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("view/sample.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("view/mainView.fxml"));
         Parent root = fxmlLoader.load();
         MainViewController mainViewController = fxmlLoader.getController();
         Scene scene = new Scene(root);
         KeyCombination undoKeyCombo = new KeyCodeCombination(KeyCode.Z, KeyCombination.CONTROL_DOWN);
-        Runnable undoPoint = () -> {
-            mainViewController.undoLatestPoint();
-        };
+        Runnable undoPoint = () -> mainViewController.undoLatestPoint();
         scene.getAccelerators().put(undoKeyCombo, undoPoint);
-        mainViewController.setScene(scene);
         primaryStage.setTitle("dxfPlot");
         primaryStage.setScene(scene);
         primaryStage.show();

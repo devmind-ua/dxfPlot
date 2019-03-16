@@ -6,7 +6,6 @@ import ua.in.devmind.dxfPlot.data.Point;
 
 import java.io.*;
 import java.math.BigDecimal;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -47,26 +46,44 @@ public class DataModel {
         }
     }
 
-    private void addPoint(Point point) {
-        pointsList.add(point);
+    public void addPoint(Point point) {
+        pointsList.add(0, point);
         recentPoints.add(point);
     }
 
-    public void saveRecentPointsToTempFile() {
-        if (recentPoints.isEmpty()) {
+    public void savePointsToTempFile(boolean recentOnly) {
+        if ((recentOnly && recentPoints.isEmpty()) || pointsList.isEmpty()) {
             return;
         }
-        try (FileWriter fw = new FileWriter(tempFile, true);
+        var oldTempFile = tempFile;
+        if (!recentOnly) {
+            try {
+                tempFile = File.createTempFile(TMP_FILE_PREFIX, TMP_FILE_SUFFIX);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        try (FileWriter fw = new FileWriter(tempFile, recentOnly);
              BufferedWriter bw = new BufferedWriter(fw);
              PrintWriter out = new PrintWriter(bw)) {
-            if (tempFile.length() > 0) {
-                out.print(POINTS_DELIMITER);
+            if (recentOnly) {
+                if (tempFile.length() > 0) {
+                    out.print(POINTS_DELIMITER);
+                }
+                out.print(recentPoints.stream()
+                        .map(Point::toRawString)
+                        .collect(Collectors.joining(POINTS_DELIMITER)));
+                recentPoints.clear();
+            } else {
+                out.print(pointsList.stream()
+                        .map(Point::toRawString)
+                        .collect(Collectors.joining(POINTS_DELIMITER)));
             }
-            out.print(recentPoints.stream()
-                    .map(Point::toRawString)
-                    .collect(Collectors.joining(POINTS_DELIMITER)));
         } catch (IOException e) {
             e.printStackTrace();
+        }
+        if (!recentOnly) {
+            oldTempFile.delete();
         }
     }
 
@@ -76,7 +93,7 @@ public class DataModel {
             while (fileScanner.hasNext()) {
                 String pointString = fileScanner.next();
                 String[] coordinates = pointString.split(Point.COORDINATES_DELIMITER);
-                Point point = new Point(new BigDecimal(coordinates[0]), new BigDecimal(coordinates[0]));
+                Point point = new Point(new BigDecimal(coordinates[0]), new BigDecimal(coordinates[1]));
                 pointsList.add(point);
             }
         } catch (IOException e) {
@@ -86,4 +103,7 @@ public class DataModel {
         }
     }
 
+    public ObservableList<Point> getPointsList() {
+        return pointsList;
+    }
 }
