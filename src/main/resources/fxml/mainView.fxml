@@ -10,7 +10,7 @@
 <?import javafx.scene.control.ListView?>
 <GridPane fx:controller="ua.in.devmind.dxfPlot.controller.MainViewController"
           xmlns:fx="http://javafx.com/fxml" alignment="center" hgap="5" vgap="5">
-    <padding><Insets top="25" right="25" bottom="10" left="25"/></padding>
+    <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
 
     <Label text="X:"
            GridPane.columnIndex="0" GridPane.rowIndex="0"/>
