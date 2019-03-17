@@ -1,0 +1,18 @@
+  0
+SECTION
+  2
+ENTITIES
+#foreach( $point in $pointsList )
+  0
+POINT
+  100
+AcDbPoint
+  10
+$point.x
+  20
+$point.y
+#end
+  0
+ENDSEC
+  0
+EOF

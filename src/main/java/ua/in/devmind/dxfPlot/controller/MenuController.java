@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.MenuBar;
 import javafx.stage.FileChooser;
+import ua.in.devmind.dxfPlot.generation.DxfGenerator;
 import ua.in.devmind.dxfPlot.model.DataModel;
 
 import java.io.File;
@@ -27,7 +28,7 @@ public class MenuController {
         FileChooser saveFileChooser = new FileChooser();
         File file = saveFileChooser.showSaveDialog(menuBar.getScene().getWindow());
         if (file != null) {
-            // TODO: implement save method
+            DxfGenerator.generateDxf(file, model.getPointsList());
         }
     }
 

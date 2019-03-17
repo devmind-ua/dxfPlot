@@ -15,7 +15,7 @@ import ua.in.devmind.dxfPlot.controller.MenuController;
 import ua.in.devmind.dxfPlot.model.data.Point;
 import ua.in.devmind.dxfPlot.model.DataModel;
 
-public class DxfPlot extends Application {
+public class DxfPlotFX extends Application {
 
     private final TextField primaryCoordinateTextField = new TextField();
     private final TextField secondaryCoordinateTextField = new TextField();
@@ -30,11 +30,11 @@ public class DxfPlot extends Application {
 
         BorderPane root = new BorderPane();
 
-        FXMLLoader mainViewLoader = new FXMLLoader(getClass().getResource("view/mainView.fxml"));
+        FXMLLoader mainViewLoader = new FXMLLoader(getClass().getResource("/fxml/mainView.fxml"));
         root.setCenter(mainViewLoader.load());
         MainViewController mainViewController = mainViewLoader.getController();
 
-        FXMLLoader menuLoader = new FXMLLoader(getClass().getResource("view/menu.fxml"));
+        FXMLLoader menuLoader = new FXMLLoader(getClass().getResource("/fxml/menu.fxml"));
         root.setTop(menuLoader.load());
         MenuController menuController = menuLoader.getController();
 
