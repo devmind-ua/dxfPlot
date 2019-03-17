@@ -26,6 +26,9 @@ public class MenuController {
     @FXML
     protected void save() {
         FileChooser saveFileChooser = new FileChooser();
+        saveFileChooser.setTitle("Save DXF file");
+        saveFileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("AutoCAD Drawing eXchange Format", "*.dxf"));
         File file = saveFileChooser.showSaveDialog(menuBar.getScene().getWindow());
         if (file != null) {
             DxfGenerator.generateDxf(file, model.getPointsList());
