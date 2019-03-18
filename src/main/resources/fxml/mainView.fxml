@@ -3,7 +3,6 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.text.Text?>
 
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
@@ -12,14 +11,14 @@
           xmlns:fx="http://javafx.com/fxml" alignment="center" hgap="5" vgap="5">
     <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
 
-    <Label text="X:"
+    <Label fx:id="primaryCoordinateLabel" text="X:"
            GridPane.columnIndex="0" GridPane.rowIndex="0"/>
 
     <TextField fx:id="primaryCoordinateTextField"
                GridPane.columnIndex="1" GridPane.rowIndex="0"
                onKeyPressed="#onPrimaryCoordinateTextFieldKeyPressed"/>
 
-    <Label text="Y:"
+    <Label fx:id="secondaryCoordinateLabel" text="Y:"
            GridPane.columnIndex="0" GridPane.rowIndex="1"/>
 
     <TextField fx:id="secondaryCoordinateTextField"

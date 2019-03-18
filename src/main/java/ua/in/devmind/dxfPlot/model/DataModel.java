@@ -2,14 +2,13 @@ package ua.in.devmind.dxfPlot.model;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
+import ua.in.devmind.dxfPlot.event.CoordinatesSwappedEvent;
 import ua.in.devmind.dxfPlot.model.data.Point;
 
 import java.io.*;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.Scanner;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class DataModel {
@@ -24,6 +23,9 @@ public class DataModel {
 
     private File tempFile;
 
+    private boolean coordinatesSwapped = false;
+    private List<EventHandler<CoordinatesSwappedEvent>> coordinatesSwappedHandlers = new ArrayList<>();
+
     public static File getLatestTempFile() {
         File tmpDir = new File(System.getProperty("java.io.tmpdir"));
         File[] tempFiles = tmpDir.listFiles((dir, name) -> name.startsWith(TMP_FILE_PREFIX) && name.endsWith(TMP_FILE_SUFFIX));
@@ -31,6 +33,22 @@ public class DataModel {
                 .sorted(Comparator.comparingLong(File::lastModified).reversed())
                 .findFirst()
                 .orElse(null);
+    }
+
+    public void addCoordinatesSwappedHandler(EventHandler<CoordinatesSwappedEvent> eventHandler) {
+        this.coordinatesSwappedHandlers.add(eventHandler);
+    }
+
+    public boolean isCoordinatesSwapped() {
+        return coordinatesSwapped;
+    }
+
+    public void setCoordinatesSwapped(boolean swapped) {
+        if (this.coordinatesSwapped != swapped) {
+            this.coordinatesSwapped = swapped;
+            final CoordinatesSwappedEvent event = new CoordinatesSwappedEvent(swapped);
+            coordinatesSwappedHandlers.forEach(handler -> handler.handle(event));
+        }
     }
 
     public void init(File _tempFile) {
@@ -46,9 +64,19 @@ public class DataModel {
         }
     }
 
-    public void addPoint(Point point) {
+    public boolean createAndAddPoint(BigDecimal primaryCoordinate, BigDecimal secondaryCoordinate) {
+        Point point;
+        if (coordinatesSwapped) {
+            point = new Point(secondaryCoordinate, primaryCoordinate);
+        } else {
+            point = new Point(primaryCoordinate, secondaryCoordinate);
+        }
+        if (pointsList.contains(point)) {
+            return false;
+        }
         pointsList.add(0, point);
         recentPoints.add(point);
+        return true;
     }
 
     public void savePointsToTempFile(boolean recentOnly) {

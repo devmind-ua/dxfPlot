@@ -2,27 +2,34 @@ package ua.in.devmind.dxfPlot.controller;
 
 import javafx.event.ActionEvent;
 import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import ua.in.devmind.dxfPlot.event.CoordinatesSwappedEvent;
 import ua.in.devmind.dxfPlot.model.data.Point;
 import ua.in.devmind.dxfPlot.model.DataModel;
 
 import java.awt.*;
 import java.math.BigDecimal;
 
-public class MainViewController {
+public class MainViewController implements EventHandler<CoordinatesSwappedEvent> {
 
     private DataModel model;
 
     @FXML
     private TextField primaryCoordinateTextField;
     @FXML
+    private Label primaryCoordinateLabel;
+    @FXML
     private TextField secondaryCoordinateTextField;
+    @FXML
+    private Label secondaryCoordinateLabel;
     @FXML
     private ListView<Point> pointsListView;
     @FXML
@@ -46,6 +53,7 @@ public class MainViewController {
             throw new IllegalStateException("Model can only be initialized once");
         }
         this.model = model;
+        this.model.addCoordinatesSwappedHandler(this);
         initView();
     }
 
@@ -99,12 +107,9 @@ public class MainViewController {
                 secondaryCoordinateTextField.requestFocus();
                 return;
             }
-            Point point = new Point(new BigDecimal(primaryCoordinateTextField.getText()), new BigDecimal(secondaryCoordinateTextField.getText()));
-            if (pointsListView.getItems().contains(point)) {
+            if (!model.createAndAddPoint(new BigDecimal(primaryCoordinateTextField.getText()), new BigDecimal(secondaryCoordinateTextField.getText()))) {
                 playSound();
                 return;
-            } else {
-                model.addPoint(point);
             }
             if (keyEvent.isControlDown()) {
                 model.savePointsToTempFile(true);
@@ -141,6 +146,17 @@ public class MainViewController {
     public void undoLatestPoint() {
         if (!pointsListView.getItems().isEmpty()) {
             pointsListView.getItems().remove(0);
+        }
+    }
+
+    @Override
+    public void handle(CoordinatesSwappedEvent coordinatesSwappedEvent) {
+        if (coordinatesSwappedEvent.isCoordinatesSwapped()) {
+            primaryCoordinateLabel.setText("Y:");
+            secondaryCoordinateLabel.setText("X:");
+        } else {
+            primaryCoordinateLabel.setText("X:");
+            secondaryCoordinateLabel.setText("Y:");
         }
     }
 }

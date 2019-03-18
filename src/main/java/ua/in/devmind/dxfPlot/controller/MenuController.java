@@ -2,6 +2,7 @@ package ua.in.devmind.dxfPlot.controller;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.MenuBar;
 import javafx.stage.FileChooser;
 import ua.in.devmind.dxfPlot.generation.DxfGenerator;
@@ -15,6 +16,8 @@ public class MenuController {
 
     @FXML
     private MenuBar menuBar;
+    @FXML
+    private CheckMenuItem swapCoordinatesMenuItem;
 
     public void initModel(DataModel model) {
         if (this.model != null) {
@@ -39,5 +42,10 @@ public class MenuController {
     protected void exit() {
         model.savePointsToTempFile(true);
         Platform.exit();
+    }
+
+    @FXML
+    protected void swapCoordinates() {
+        model.setCoordinatesSwapped(swapCoordinatesMenuItem.isSelected());
     }
 }

@@ -6,12 +6,16 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SeparatorMenuItem?>
 
+<?import javafx.scene.control.CheckMenuItem?>
 <StackPane fx:controller="ua.in.devmind.dxfPlot.controller.MenuController" xmlns:fx="http://javafx.com/fxml/1">
     <MenuBar fx:id="menuBar">
         <Menu text="File">
             <MenuItem text="Save" onAction="#save" accelerator="Shortcut+S"/>
             <SeparatorMenuItem />
             <MenuItem text="Quit" onAction="#exit"/>
+        </Menu>
+        <Menu text="Config">
+            <CheckMenuItem fx:id="swapCoordinatesMenuItem" text="Swap coordinates" onAction="#swapCoordinates"/>
         </Menu>
     </MenuBar>
 </StackPane>
