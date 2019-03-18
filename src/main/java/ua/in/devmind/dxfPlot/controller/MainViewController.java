@@ -6,17 +6,17 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import ua.in.devmind.dxfPlot.event.CoordinatesSwappedEvent;
-import ua.in.devmind.dxfPlot.model.data.Point;
 import ua.in.devmind.dxfPlot.model.DataModel;
+import ua.in.devmind.dxfPlot.model.data.Point;
 
 import java.awt.*;
 import java.math.BigDecimal;
+import java.util.Optional;
 
 public class MainViewController implements EventHandler<CoordinatesSwappedEvent> {
 
@@ -151,6 +151,19 @@ public class MainViewController implements EventHandler<CoordinatesSwappedEvent>
 
     @Override
     public void handle(CoordinatesSwappedEvent coordinatesSwappedEvent) {
+        if (!model.getPointsList().isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Swap coordinates");
+            alert.setHeaderText("Points list is not empty");
+            alert.setContentText("Do you want to swap coordinates for existing points?");
+            ButtonType yesBtn = new ButtonType("Yes");
+            ButtonType noBtn = new ButtonType("No");
+            alert.getButtonTypes().setAll(yesBtn, noBtn);
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.orElse(noBtn) == yesBtn) {
+                model.swapCoordinatesForExistingPoints();
+            }
+        }
         if (coordinatesSwappedEvent.isCoordinatesSwapped()) {
             primaryCoordinateLabel.setText("Y:");
             secondaryCoordinateLabel.setText("X:");

@@ -134,4 +134,13 @@ public class DataModel {
     public ObservableList<Point> getPointsList() {
         return pointsList;
     }
+
+    public void swapCoordinatesForExistingPoints() {
+        List<Point> swappedPoints = pointsList.stream()
+                .map(p -> new Point(p.getY(), p.getX()))
+                .collect(Collectors.toList());
+        pointsList.clear();
+        pointsList.addAll(swappedPoints);
+        savePointsToTempFile(false);
+    }
 }
