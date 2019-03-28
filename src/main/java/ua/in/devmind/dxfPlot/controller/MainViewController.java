@@ -138,7 +138,7 @@ public class MainViewController implements EventHandler<CoordinatesSwappedEvent>
     }
 
     private void deleteSelectedPoints() {
-        pointsListView.getItems().removeAll(pointsListView.getSelectionModel().getSelectedItems());
+        model.getPointsList().removeAll(pointsListView.getSelectionModel().getSelectedItems());
         pointsListView.getSelectionModel().clearSelection();
         model.savePointsToTempFile(false);
     }
